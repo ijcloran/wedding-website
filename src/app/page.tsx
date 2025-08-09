@@ -6,16 +6,17 @@ const targetDate = new Date("2026-06-12T00:00:00-04:00");
 
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center">
-      <h1 className="text-5xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-7xl">
+    <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-6 px-6 py-16 text-center">
+      <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl lg:text-7xl">
         Isaac Cloran
-        <span className="mx-3 inline-block align-middle text-3xl text-gray-400">&</span>
+        <span className="mx-3 inline-block align-middle text-xl text-gray-400 sm:text-2xl md:text-3xl">&</span>
         Lily House
       </h1>
-      <p className="mt-2 tracking-[0.25em] text-xs uppercase text-[color:rgba(15,17,19,0.6)]">
+      <p className="mt-2 uppercase tracking-[0.18em] text-[11px] text-[color:rgba(15,17,19,0.6)] sm:tracking-[0.25em] sm:text-xs md:text-sm">
         June 12, 2026 · Indianapolis, IN
       </p>
       <Countdown />
+      <ShootingStars />
     </main>
   );
 };
@@ -43,7 +44,7 @@ const Countdown = () => {
   }, [now]);
 
   return (
-    <div className="countdown mt-10 grid w-full max-w-3xl grid-cols-4 gap-4 rounded-3xl px-5 py-6 text-center">
+    <div className="countdown mt-10 grid w-full max-w-3xl grid-cols-1 gap-4 rounded-3xl px-4 py-5 text-center sm:grid-cols-2 sm:px-5 sm:py-6 md:grid-cols-4">
       <TimeCell label="Days" value={remaining.days} pending={!now} />
       <TimeCell label="Hours" value={remaining.hours} pending={!now} />
       <TimeCell label="Minutes" value={remaining.minutes} pending={!now} />
@@ -52,12 +53,93 @@ const Countdown = () => {
   );
 };
 
+// Shooting stars overlay
+type Star = {
+  id: number;
+  leftVw: number;
+  topVh: number;
+  angleDeg: number;
+  durationMs: number;
+  travelVw: number;
+};
+
+const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+const ShootingStars = () => {
+  const [stars, setStars] = useState<Star[]>([]);
+  const idRef = useState(() => ({ value: 0 }))[0];
+  const timeoutRef = useState<{ id: ReturnType<typeof setTimeout> | null }>(() => ({ id: null }))[0];
+
+  useEffect(() => {
+    const scheduleNext = () => {
+      const nextDelayMs = Math.round(randomInRange(2000, 10000));
+      timeoutRef.id = setTimeout(() => {
+        // Create a star with random position, angle, duration, and travel
+        const id = ++idRef.value;
+        const leftToRight = Math.random() < 0.5;
+        const star: Star = {
+          id,
+          leftVw: leftToRight ? randomInRange(-10, 30) : randomInRange(70, 110),
+          topVh: randomInRange(0, 100),
+          angleDeg: leftToRight ? randomInRange(-30, 10) : randomInRange(-10, 30),
+          durationMs: Math.round(randomInRange(900, 1800)),
+          travelVw: Math.round((leftToRight ? 1 : -1) * randomInRange(120, 160)),
+        };
+        setStars((prev) => [...prev, star]);
+
+        // Remove it after it finishes
+        setTimeout(() => {
+          setStars((prev) => prev.filter((s) => s.id !== id));
+        }, star.durationMs + 100);
+
+        scheduleNext();
+      }, nextDelayMs);
+    };
+
+    scheduleNext();
+    return () => {
+      if (timeoutRef.id) clearTimeout(timeoutRef.id);
+    };
+  }, [idRef, timeoutRef]);
+
+  if (stars.length === 0) return null;
+
+  return (
+    <div
+      className="pointer-events-none fixed inset-0 z-10 overflow-hidden"
+      role="presentation"
+      aria-hidden="true"
+    >
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="absolute"
+          style={{
+            left: `${star.leftVw}vw`,
+            top: `${star.topVh}vh`,
+            transform: `rotate(${star.angleDeg}deg)`
+          }}
+        >
+          <span
+            className="block h-[2px] w-[14vw] rounded-full bg-gradient-to-r from-white/0 via-white/80 to-white shadow-[0_0_12px_rgba(255,255,255,0.7)] will-change-transform"
+            style={{
+              ["--travel" as any]: `${star.travelVw}vw`,
+              ["--dur" as any]: `${star.durationMs}ms`,
+              animation: "star-shoot var(--dur) linear forwards"
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 type TimeCellProps = { label: string; value: number; pending?: boolean };
 const TimeCell = ({ label, value, pending = false }: TimeCellProps) => {
   const padded = value.toString().padStart(2, "0");
   return (
-    <div className="rounded-2xl border border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.08)] px-6 py-7">
-      <div className="countdown-number tick text-5xl font-semibold tracking-wide text-[color:var(--deco-ink)] sm:text-7xl">
+    <div className="rounded-2xl border border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.08)] px-4 py-5 sm:px-6 sm:py-7">
+      <div className="countdown-number tick text-4xl font-semibold tracking-wide text-[color:var(--deco-ink)] sm:text-5xl md:text-7xl">
         {pending ? "--" : padded}
       </div>
       <div className="mt-3 text-xs uppercase tracking-[0.25em] text-[color:rgba(15,17,19,0.6)]">{label}</div>
