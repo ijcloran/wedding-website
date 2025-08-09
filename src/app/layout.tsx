@@ -22,6 +22,11 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   title: "Isaac & Lily — June 12, 2026",
   description: "A joyful celebration at Our Lady of Mt. Carmel and Bottleworks Hotel, Indianapolis.",
+  icons: {
+    icon: [{ url: "/icon.svg" }],
+    shortcut: ["/icon.svg"],
+    apple: ["/icon.svg"],
+  },
   openGraph: {
     title: "Isaac & Lily — June 12, 2026",
     description:
