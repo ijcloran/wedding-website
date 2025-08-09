@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+:root {
+  /* Art Deco palette */
+  --deco-ink: #0f1113; /* deep charcoal */
+  --deco-cream: #f1ebe4; /* warm paper */
+  --deco-gold: #d4af37; /* soft metallic gold */
+  --deco-emerald: #1c6b5a; /* accent */
+
+  --background: var(--deco-cream);
+  --foreground: var(--deco-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-deco: var(--font-cinzel);
+}
+
+/* Keep a consistent theme regardless of system theme for this site. */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Simple falling petals animation used in the hero */
+.petal {
+  position: absolute;
+  top: -40px;
+  background: radial-gradient(circle at 30% 30%, #f3d885, #ffe9b0 60%, transparent 70%);
+  border-radius: 42% 58% 38% 62% / 42% 32% 68% 58%;
+  opacity: 0.8;
+  animation-name: fall, sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+@keyframes sway {
+  0%, 100% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 16px;
+  }
+}
+
+/* Horizontal continuous marquee for filmstrip */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+/* Subtle art deco background pattern */
+.deco-bg {
+  background-image:
+    radial-gradient(ellipse at top, rgba(255,255,255,0.06), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(212,175,55,0.08) 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(-45deg, rgba(212,175,55,0.08) 0 2px, transparent 2px 20px);
+}
+
+/* Ornamental divider */
+.deco-divider {
+  height: 1px;
+  background-image: linear-gradient(to right, transparent, var(--deco-gold), transparent);
+}
+
+/* Cards with gold border */
+.deco-card {
+  border: 1px solid rgba(212,175,55,0.5);
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+}
+
+/* Countdown styling */
+.countdown {
+  border: 1px solid rgba(212,175,55,0.5);
+  background: rgba(212,175,55,0.06);
+  color: var(--deco-ink);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+.countdown-number { font-family: var(--font-cinzel), ui-serif, Georgia, serif; }
+@keyframes pop {
+  0% { transform: scale(0.98); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.tick {
+  animation: pop 220ms ease-out;
+}
+
+/* Hide scrollbars for horizontal poster row */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Animated golden spine */
+.spine-animated {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(212,175,55,0.9) 0 8px,
+    rgba(212,175,55,0.35) 8px 16px
+  );
+  animation: spineFlow 2.2s linear infinite;
+}
+
+@keyframes spineFlow {
+  from { background-position-y: 0; }
+  to { background-position-y: 100%; }
+}
+
+/* Poster hover tilt */
+.poster-tilt { transition: transform 350ms ease, box-shadow 350ms ease; }
+.poster-tilt:hover { transform: rotate(-1.5deg) translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,0.15); }
