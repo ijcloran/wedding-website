@@ -148,7 +148,13 @@ body {
     opacity: 1;
   }
   100% {
-    transform: translate3d(var(--travel, 140vw), 0, 0) scaleX(1);
+    transform: translate3d(var(--travel-x, 140vw), var(--travel-y, 0), 0) scaleX(1);
     opacity: 0;
   }
+}
+
+@keyframes star-flicker {
+  0%, 100% { filter: brightness(1); }
+  40% { filter: brightness(1.35); }
+  60% { filter: brightness(0.85); }
 }

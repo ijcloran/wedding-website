@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const targetDate = new Date("2026-06-12T00:00:00-04:00");
 
@@ -58,9 +58,9 @@ type Star = {
   id: number;
   leftVw: number;
   topVh: number;
-  angleDeg: number;
   durationMs: number;
-  travelVw: number;
+  travelXvw: number;
+  travelYvh: number;
 };
 
 const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -70,37 +70,60 @@ const ShootingStars = () => {
   const idRef = useState(() => ({ value: 0 }))[0];
   const timeoutRef = useState<{ id: ReturnType<typeof setTimeout> | null }>(() => ({ id: null }))[0];
 
+  const spawnStar = useCallback(() => {
+    const id = ++idRef.value;
+
+    const randomOffscreenPoint = () => {
+      const side = Math.floor(Math.random() * 4); // 0:left,1:top,2:right,3:bottom
+      if (side === 0) return { x: randomInRange(-20, -5), y: randomInRange(0, 100) };
+      if (side === 1) return { x: randomInRange(0, 100), y: randomInRange(-20, -5) };
+      if (side === 2) return { x: randomInRange(105, 120), y: randomInRange(0, 100) };
+      return { x: randomInRange(0, 100), y: randomInRange(105, 120) };
+    };
+
+    const start = randomOffscreenPoint();
+    let end = randomOffscreenPoint();
+    // Ensure end is not too close to start direction to better cross the screen
+    let guard = 0;
+    while (Math.hypot(end.x - start.x, end.y - start.y) < 60 && guard < 5) {
+      end = randomOffscreenPoint();
+      guard++;
+    }
+
+    const star: Star = {
+      id,
+      leftVw: start.x,
+      topVh: start.y,
+      durationMs: Math.round(randomInRange(1100, 2000)),
+      travelXvw: end.x - start.x,
+      travelYvh: end.y - start.y,
+    };
+    setStars((prev) => [...prev, star]);
+    setTimeout(() => {
+      setStars((prev) => prev.filter((s) => s.id !== id));
+    }, star.durationMs + 160);
+  }, [idRef, setStars]);
+
   useEffect(() => {
     const scheduleNext = () => {
       const nextDelayMs = Math.round(randomInRange(2000, 10000));
       timeoutRef.id = setTimeout(() => {
-        // Create a star with random position, angle, duration, and travel
-        const id = ++idRef.value;
-        const leftToRight = Math.random() < 0.5;
-        const star: Star = {
-          id,
-          leftVw: leftToRight ? randomInRange(-10, 30) : randomInRange(70, 110),
-          topVh: randomInRange(0, 100),
-          angleDeg: leftToRight ? randomInRange(-30, 10) : randomInRange(-10, 30),
-          durationMs: Math.round(randomInRange(900, 1800)),
-          travelVw: Math.round((leftToRight ? 1 : -1) * randomInRange(120, 160)),
-        };
-        setStars((prev) => [...prev, star]);
-
-        // Remove it after it finishes
-        setTimeout(() => {
-          setStars((prev) => prev.filter((s) => s.id !== id));
-        }, star.durationMs + 100);
-
+        spawnStar();
         scheduleNext();
       }, nextDelayMs);
     };
 
     scheduleNext();
+    const handleClick = () => {
+      spawnStar();
+    };
+
+    window.addEventListener("click", handleClick);
     return () => {
       if (timeoutRef.id) clearTimeout(timeoutRef.id);
+      window.removeEventListener("click", handleClick);
     };
-  }, [idRef, timeoutRef]);
+  }, [spawnStar, timeoutRef]);
 
   if (stars.length === 0) return null;
 
@@ -110,26 +133,43 @@ const ShootingStars = () => {
       role="presentation"
       aria-hidden="true"
     >
-      {stars.map((star) => (
-        <div
-          key={star.id}
-          className="absolute"
-          style={{
-            left: `${star.leftVw}vw`,
-            top: `${star.topVh}vh`,
-            transform: `rotate(${star.angleDeg}deg)`
-          }}
-        >
-          <span
-            className="block h-[2px] w-[14vw] rounded-full bg-gradient-to-r from-white/0 via-white/80 to-white shadow-[0_0_12px_rgba(255,255,255,0.7)] will-change-transform"
-            style={{
-              ["--travel" as any]: `${star.travelVw}vw`,
-              ["--dur" as any]: `${star.durationMs}ms`,
-              animation: "star-shoot var(--dur) linear forwards"
-            }}
-          />
-        </div>
-      ))}
+      {stars.map((star) => {
+        const angleDeg = Math.atan2(star.travelYvh, star.travelXvw) * (180 / Math.PI);
+        const containerStyle: React.CSSProperties & Record<string, string> = {
+          left: `${star.leftVw}vw`,
+          top: `${star.topVh}vh`,
+          "--travel-x": `${star.travelXvw}vw`,
+          "--travel-y": `${star.travelYvh}vh`,
+          "--dur": `${star.durationMs}ms`,
+          animation: "star-shoot var(--dur) linear forwards",
+        };
+        return (
+          <div
+            key={star.id}
+            className="absolute"
+            style={containerStyle}
+          >
+            <div className="relative" style={{ transform: `rotate(${angleDeg}deg)` }}>
+              {/* Tail */}
+              <span
+                className="block h-[2px] sm:h-[2.5px] md:h-[3px] w-[26vw] sm:w-[20vw] md:w-[16vw] rounded-full bg-gradient-to-r from-[rgba(255,255,255,0)] via-[rgba(255,255,255,0.95)] to-[color:var(--deco-gold)] shadow-[0_0_18px_rgba(255,255,255,0.95),0_0_36px_rgba(212,175,55,0.75),0_0_60px_rgba(255,255,255,0.65)] mix-blend-plus-lighter"
+                style={{
+                  animation: "star-flicker 600ms ease-in-out infinite",
+                }}
+              />
+              {/* Core head */}
+              <span
+                className="absolute right-0 top-1/2 block h-2 w-2 -translate-y-1/2 rounded-full shadow-[0_0_16px_rgba(255,255,255,0.95),0_0_28px_rgba(212,175,55,0.8),0_0_70px_rgba(255,255,255,0.75)] mix-blend-plus-lighter"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0) 75%)",
+                  animation: "star-flicker 500ms ease-in-out infinite",
+                }}
+              />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
