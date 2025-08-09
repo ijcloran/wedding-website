@@ -1,3 +1,0 @@
-// RSVP removed per request
-
-

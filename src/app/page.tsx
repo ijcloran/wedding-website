@@ -7,14 +7,14 @@ const targetDate = new Date("2026-06-12T00:00:00-04:00");
 const Home = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center">
-      <p className="tracking-[0.25em] text-xs uppercase text-[color:rgba(15,17,19,0.6)]">
-        June 12, 2026 · Indianapolis, IN
-      </p>
-      <h1 className="mt-2 text-5xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-7xl">
+      <h1 className="text-5xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-7xl">
         Isaac Cloran
         <span className="mx-3 inline-block align-middle text-3xl text-gray-400">&</span>
         Lily House
       </h1>
+      <p className="mt-2 tracking-[0.25em] text-xs uppercase text-[color:rgba(15,17,19,0.6)]">
+        June 12, 2026 · Indianapolis, IN
+      </p>
       <Countdown />
     </main>
   );
