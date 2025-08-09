@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cinzel } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -49,7 +49,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased deco-bg`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased deco-bg`}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { track } from "@vercel/analytics";
 
 const targetDate = new Date("2026-06-12T00:00:00-04:00");
 
@@ -69,6 +70,7 @@ const ShootingStars = () => {
   const [stars, setStars] = useState<Star[]>([]);
   const idRef = useState(() => ({ value: 0 }))[0];
   const timeoutRef = useState<{ id: ReturnType<typeof setTimeout> | null }>(() => ({ id: null }))[0];
+  const lastTrackRef = useRef(0);
 
   const spawnStar = useCallback(() => {
     const id = ++idRef.value;
@@ -114,7 +116,14 @@ const ShootingStars = () => {
     };
 
     scheduleNext();
-    const handleClick = () => {
+    const handleClick = (event: MouseEvent) => {
+      const now = Date.now();
+      if (now - lastTrackRef.current > 600) {
+        const xvw = (event.clientX / window.innerWidth) * 100;
+        const yvh = (event.clientY / window.innerHeight) * 100;
+        track("star_click", { x: event.clientX, y: event.clientY, vw: xvw, vh: yvh });
+        lastTrackRef.current = now;
+      }
       spawnStar();
     };
 
