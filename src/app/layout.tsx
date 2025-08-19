@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cinzel } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+import ConvexClientProvider from "./ConvexClientProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} antialiased deco-bg`}>
-        {children}
+        <ConvexClientProvider>
+          {children}
+        </ConvexClientProvider>
         <Analytics />
       </body>
     </html>

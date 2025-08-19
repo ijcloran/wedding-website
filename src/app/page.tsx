@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
 
-const targetDate = new Date("2026-06-12T00:00:00-04:00");
+const targetDate = new Date("2026-06-12T15:30:00-04:00");
 
 const Home = () => {
   return (
@@ -24,8 +24,63 @@ const Home = () => {
 
 export default Home;
 
+interface ViewModeToggleProps {
+  currentMode: ViewMode;
+  onModeChange: (mode: ViewMode) => void;
+}
+
+const ViewModeToggle = ({ currentMode, onModeChange }: ViewModeToggleProps) => {
+  const viewModes: { key: ViewMode; label: string; description: string }[] = [
+    { key: "classic", label: "Classic", description: "Days, Hours, Minutes, Seconds" },
+    { key: "week-focus", label: "Weekly", description: "Weeks, Days, Hours, Minutes" },
+    { key: "month-focus", label: "Monthly", description: "Months, Days, Hours, Minutes" },
+    { key: "minimal", label: "Simple", description: "Days, Hours" },
+    { key: "precise", label: "Precise", description: "Total Hours, Minutes, Seconds" }
+  ];
+
+  return (
+    <div className="mb-6 flex flex-wrap justify-center gap-2">
+      {viewModes.map((mode) => (
+        <button
+          key={mode.key}
+          onClick={() => onModeChange(mode.key)}
+          className={`px-3 py-2 text-xs font-medium uppercase tracking-[0.1em] rounded-xl border transition-all duration-300 ${
+            currentMode === mode.key
+              ? "border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.15)] text-[color:var(--deco-ink)] shadow-sm"
+              : "border-[color:rgba(212,175,55,0.3)] bg-[color:rgba(212,175,55,0.05)] text-[color:rgba(15,17,19,0.7)] hover:border-[color:var(--deco-gold)] hover:bg-[color:rgba(212,175,55,0.1)]"
+          }`}
+        >
+          {mode.label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+type ViewMode = 
+  | "classic"        // Days, Hours, Minutes, Seconds
+  | "week-focus"     // Weeks, Days, Hours, Minutes
+  | "month-focus"    // Months, Days, Hours, Minutes
+  | "minimal"        // Days, Hours
+  | "precise";       // Total Hours, Minutes, Seconds
+
+interface TimeRemaining {
+  years: number;
+  months: number;
+  weeks: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  totalDays: number;
+  totalHours: number;
+  totalMinutes: number;
+  totalSeconds: number;
+}
+
 const Countdown = () => {
   const [now, setNow] = useState<Date | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("classic");
 
   useEffect(() => {
     setNow(new Date());
@@ -33,23 +88,152 @@ const Countdown = () => {
     return () => clearInterval(id);
   }, []);
 
-  const remaining = useMemo(() => {
-    if (!now) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  // Load saved preference
+  useEffect(() => {
+    const saved = localStorage.getItem("countdown-view-mode");
+    if (saved && ["classic", "week-focus", "month-focus", "minimal", "precise"].includes(saved)) {
+      setViewMode(saved as ViewMode);
+    }
+  }, []);
+
+  // Save preference
+  useEffect(() => {
+    localStorage.setItem("countdown-view-mode", viewMode);
+  }, [viewMode]);
+
+  const remaining = useMemo((): TimeRemaining => {
+    if (!now) {
+      return {
+        years: 0, months: 0, weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0,
+        totalDays: 0, totalHours: 0, totalMinutes: 0, totalSeconds: 0
+      };
+    }
+
     const diffMs = Math.max(0, targetDate.getTime() - now.getTime());
     const totalSeconds = Math.floor(diffMs / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalSeconds / 3600);
+    const totalDays = Math.floor(totalSeconds / 86400);
+
+    // Calculate years and remaining time
+    const currentYear = now.getFullYear();
+    const targetYear = targetDate.getFullYear();
+    const years = Math.max(0, targetYear - currentYear);
+    
+    // Calculate months more accurately
+    let months = 0;
+    const nowYear = now.getFullYear();
+    const nowMonth = now.getMonth();
+    const weddingYear = targetDate.getFullYear();
+    const weddingMonth = targetDate.getMonth();
+    
+    months = (weddingYear - nowYear) * 12 + (weddingMonth - nowMonth);
+    
+    // Adjust if we haven't reached the target day yet in the target month
+    if (now.getDate() > targetDate.getDate()) {
+      months--;
+    }
+
+    // Calculate weeks from total remaining days
+    const weeks = Math.floor(totalDays / 7);
+
+    // Standard breakdown
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    return { days, hours, minutes, seconds };
+
+    return {
+      years,
+      months,
+      weeks,
+      days,
+      hours,
+      minutes,
+      seconds,
+      totalDays,
+      totalHours,
+      totalMinutes,
+      totalSeconds
+    };
   }, [now]);
 
+  const getDisplayUnits = () => {
+    switch (viewMode) {
+      case "classic":
+        return [
+          { label: "Days", value: remaining.days },
+          { label: "Hours", value: remaining.hours },
+          { label: "Minutes", value: remaining.minutes },
+          { label: "Seconds", value: remaining.seconds }
+        ];
+      
+      case "week-focus":
+        return [
+          { label: "Weeks", value: Math.floor(remaining.days / 7) },
+          { label: "Days", value: remaining.days % 7 },
+          { label: "Hours", value: remaining.hours },
+          { label: "Minutes", value: remaining.minutes }
+        ];
+      
+      case "month-focus":
+        return [
+          { label: "Months", value: remaining.months },
+          { label: "Days", value: remaining.days % 30 },
+          { label: "Hours", value: remaining.hours },
+          { label: "Minutes", value: remaining.minutes }
+        ];
+      
+      case "minimal":
+        return [
+          { label: "Days", value: remaining.days },
+          { label: "Hours", value: remaining.hours }
+        ];
+      
+      case "precise":
+        return [
+          { label: "Hours", value: remaining.totalHours },
+          { label: "Minutes", value: remaining.totalMinutes % 60 },
+          { label: "Seconds", value: remaining.seconds }
+        ];
+      
+      default:
+        return [
+          { label: "Days", value: remaining.days },
+          { label: "Hours", value: remaining.hours },
+          { label: "Minutes", value: remaining.minutes },
+          { label: "Seconds", value: remaining.seconds }
+        ];
+    }
+  };
+
+  const displayUnits = getDisplayUnits();
+  const gridCols = displayUnits.length;
+
   return (
-    <div className="countdown mt-10 grid w-full max-w-3xl grid-cols-1 gap-4 rounded-3xl px-4 py-5 text-center sm:grid-cols-2 sm:px-5 sm:py-6 md:grid-cols-4">
-      <TimeCell label="Days" value={remaining.days} pending={!now} />
-      <TimeCell label="Hours" value={remaining.hours} pending={!now} />
-      <TimeCell label="Minutes" value={remaining.minutes} pending={!now} />
-      <TimeCell label="Seconds" value={remaining.seconds} pending={!now} />
+    <div className="mt-10 w-full max-w-4xl">
+      {/* View Mode Toggle */}
+      <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
+      
+      {/* Countdown Display */}
+      <div 
+        className={`countdown mt-6 grid w-full gap-3 rounded-3xl px-4 py-5 text-center transition-all duration-500 ease-in-out sm:gap-4 sm:px-5 sm:py-6 ${
+          gridCols === 1 ? "grid-cols-1" :
+          gridCols === 2 ? "grid-cols-1 sm:grid-cols-2" :
+          gridCols === 3 ? "grid-cols-1 sm:grid-cols-3" :
+          "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+        }`}
+      >
+        {displayUnits.map((unit, index) => (
+          <TimeCell
+            key={`${viewMode}-${unit.label}`}
+            label={unit.label}
+            value={unit.value}
+            pending={!now}
+            delay={index * 100}
+          />
+        ))}
+      </div>
     </div>
   );
 };
@@ -144,7 +328,9 @@ const ShootingStars = () => {
     >
       {stars.map((star) => {
         const angleDeg = Math.atan2(star.travelYvh, star.travelXvw) * (180 / Math.PI);
-        const containerStyle: React.CSSProperties & Record<string, string> = {
+        // Allow CSS custom properties without using `any`.
+        type CSSVarProperties = { [key: `--${string}`]: string | number };
+        const containerStyle: React.CSSProperties & CSSVarProperties = {
           left: `${star.leftVw}vw`,
           top: `${star.topVh}vh`,
           "--travel-x": `${star.travelXvw}vw`,
@@ -183,15 +369,45 @@ const ShootingStars = () => {
   );
 };
 
-type TimeCellProps = { label: string; value: number; pending?: boolean };
-const TimeCell = ({ label, value, pending = false }: TimeCellProps) => {
-  const padded = value.toString().padStart(2, "0");
+type TimeCellProps = { 
+  label: string; 
+  value: number; 
+  pending?: boolean; 
+  delay?: number;
+};
+
+const TimeCell = ({ label, value, pending = false, delay = 0 }: TimeCellProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
+  const formatValue = (val: number) => {
+    if (val >= 1000) {
+      return val.toLocaleString();
+    }
+    return val.toString().padStart(2, "0");
+  };
+
+  const displayValue = pending ? "--" : formatValue(value);
+
   return (
-    <div className="rounded-2xl border border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.08)] px-4 py-5 sm:px-6 sm:py-7">
-      <div className="countdown-number tick text-4xl font-semibold tracking-wide text-[color:var(--deco-ink)] sm:text-5xl md:text-7xl">
-        {pending ? "--" : padded}
+    <div 
+      className={`rounded-2xl border border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.08)] px-4 py-5 transition-all duration-500 ease-out sm:px-6 sm:py-7 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="countdown-number tick text-4xl font-semibold tracking-wide text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl lg:text-7xl">
+        {displayValue}
       </div>
-      <div className="mt-3 text-xs uppercase tracking-[0.25em] text-[color:rgba(15,17,19,0.6)]">{label}</div>
+      <div className="mt-3 text-xs uppercase tracking-[0.25em] text-[color:rgba(15,17,19,0.6)]">
+        {label}
+      </div>
     </div>
   );
 };
