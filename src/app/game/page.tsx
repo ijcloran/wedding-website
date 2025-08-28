@@ -203,7 +203,7 @@ const GamePage = () => {
   };
 
   const copyScore = async () => {
-    const text = `I got ${score} questions right on Lily and Isaac's trivia, try it at lilyandisaac.com`;
+    const text = `I got ${score} questions right on Lily and Isaac's wedding trivia! Try to beat me at lilyandisaac.com/game!`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
