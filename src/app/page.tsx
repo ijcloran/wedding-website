@@ -1,32 +1,92 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { track } from "@vercel/analytics";
 import Link from "next/link";
 
 const targetDate = new Date("2026-06-12T15:30:00-04:00");
 
 const Home = () => {
+  const backgroundData = useQuery(api.photos.getBackgroundImage);
+  
   return (
-    <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-6 px-6 py-16 text-center">
-      <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl lg:text-7xl">
-        Lily House
-        <span className="mx-3 inline-block align-middle text-xl text-gray-400 sm:text-2xl md:text-3xl">&</span>
-        Isaac Cloran
-      </h1>
-      <p className="mt-2 uppercase tracking-[0.18em] text-[11px] text-[color:rgba(15,17,19,0.6)] sm:tracking-[0.25em] sm:text-xs md:text-sm">
-        June 12, 2026 · Indianapolis, IN
-      </p>
-      <Countdown />
-      <div className="mt-8">
-        <Link 
-          href="/game"
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-[0.15em] text-[color:rgba(15,17,19,0.6)] hover:text-[color:var(--deco-gold)] transition-colors border border-[color:rgba(212,175,55,0.3)] rounded-xl hover:border-[color:var(--deco-gold)] hover:bg-[color:rgba(212,175,55,0.05)]"
-        >
-          <span>🎯</span>
-          Wedding Trivia
-        </Link>
+    <main 
+      className="deco-bg relative h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)] overflow-hidden"
+      style={{
+        backgroundImage: backgroundData?.url 
+          ? `url(${backgroundData.url}), linear-gradient(135deg, var(--pure-white) 0%, var(--light-blue) 50%, var(--pure-white) 100%)`
+          : undefined,
+        backgroundSize: backgroundData?.url ? 'contain, cover' : undefined,
+        backgroundPosition: backgroundData?.url ? 'center, center' : undefined,
+        backgroundRepeat: backgroundData?.url ? 'no-repeat, no-repeat' : undefined,
+      }}
+    >
+      {/* Classic decorative pattern */}
+      <div className="absolute inset-0 overflow-hidden opacity-30">
+        {/* Elegant geometric pattern */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[color:var(--accent-blue)]/10 to-transparent transform -skew-y-6"></div>
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[color:var(--button-blue)]/10 to-transparent transform skew-y-6"></div>
+        
+        {/* Classic corner flourishes */}
+        <div className="absolute top-0 left-0 w-96 h-96">
+          <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-[color:var(--accent-blue)]/20"></div>
+          <div className="absolute top-8 left-8 w-24 h-24 border-t border-l border-[color:var(--button-blue)]/30"></div>
+        </div>
+        <div className="absolute bottom-0 right-0 w-96 h-96">
+          <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-[color:var(--accent-blue)]/20"></div>
+          <div className="absolute bottom-8 right-8 w-24 h-24 border-b border-r border-[color:var(--button-blue)]/30"></div>
+        </div>
       </div>
+      
+      <div className="relative z-10 max-w-4xl mx-auto space-y-8">
+        {/* Main heading with elegant styling */}
+        <div className="space-y-4 bg-white/25 backdrop-blur-sm rounded-2xl px-4 py-6 mx-4 sm:px-8 sm:py-8 sm:mx-0">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+              <span className="whitespace-nowrap">Lily House</span>
+              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[color:var(--accent-blue)] font-normal">
+                &
+              </span>
+              <span className="whitespace-nowrap">Isaac Cloran</span>
+            </div>
+          </h1>
+          
+          <div className="flex items-center justify-center space-x-4 my-6">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
+            <div className="w-2 h-2 bg-[color:var(--primary-blue)] rounded-full shadow-sm"></div>
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
+          </div>
+          
+          <p className="text-sm md:text-base uppercase tracking-[0.3em] text-[color:var(--primary-navy)] font-semibold drop-shadow-sm">
+            June 12, 2026 · Indianapolis, IN
+          </p>
+        </div>
+
+        {/* Countdown component */}
+        <Countdown />
+
+        {/* Navigation links with new styling */}
+        <div className="pt-8 space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link 
+              href="/gallery"
+              className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium text-[color:var(--pure-white)] bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+            >
+              Our Gallery
+            </Link>
+            
+            <Link 
+              href="/game"
+              className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+            >
+              Wedding Trivia
+            </Link>
+          </div>
+        </div>
+      </div>
+      
       <ShootingStars />
     </main>
   );
@@ -49,15 +109,15 @@ const ViewModeToggle = ({ currentMode, onModeChange }: ViewModeToggleProps) => {
   ];
 
   return (
-    <div className="mb-6 flex flex-wrap justify-center gap-2">
+    <div className="mb-8 flex flex-wrap justify-center gap-3">
       {viewModes.map((mode) => (
         <button
           key={mode.key}
           onClick={() => onModeChange(mode.key)}
-          className={`px-3 py-2 text-xs font-medium uppercase tracking-[0.1em] rounded-xl border transition-all duration-300 ${
+          className={`px-4 py-2.5 text-xs font-medium uppercase tracking-[0.1em] rounded-full border transition-all duration-300 ${
             currentMode === mode.key
-              ? "border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.15)] text-[color:var(--deco-ink)] shadow-sm"
-              : "border-[color:rgba(212,175,55,0.3)] bg-[color:rgba(212,175,55,0.05)] text-[color:rgba(15,17,19,0.7)] hover:border-[color:var(--deco-gold)] hover:bg-[color:rgba(212,175,55,0.1)]"
+              ? "border-[color:var(--button-blue)] bg-[color:var(--button-blue)] text-[color:var(--pure-white)] shadow-lg shadow-[color:var(--button-blue)]/25"
+              : "border-[color:var(--border-blue)] bg-[color:var(--pure-white)] text-[color:var(--text-gray)] hover:border-[color:var(--accent-blue)] hover:bg-[color:var(--light-blue)] hover:text-[color:var(--button-blue)]"
           }`}
         >
           {mode.label}
@@ -221,13 +281,13 @@ const Countdown = () => {
   const gridCols = displayUnits.length;
 
   return (
-    <div className="mt-10 w-full max-w-4xl">
+    <div className="w-full max-w-5xl">
       {/* View Mode Toggle */}
       <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
       
       {/* Countdown Display */}
       <div 
-        className={`countdown mt-6 grid w-full gap-3 rounded-3xl px-4 py-5 text-center transition-all duration-500 ease-in-out sm:gap-4 sm:px-5 sm:py-6 ${
+        className={`countdown grid w-full gap-4 rounded-2xl px-6 py-8 text-center transition-all duration-500 ease-in-out sm:gap-6 sm:px-8 sm:py-10 ${
           gridCols === 1 ? "grid-cols-1" :
           gridCols === 2 ? "grid-cols-1 sm:grid-cols-2" :
           gridCols === 3 ? "grid-cols-1 sm:grid-cols-3" :
@@ -357,17 +417,17 @@ const ShootingStars = () => {
             <div className="relative" style={{ transform: `rotate(${angleDeg}deg)` }}>
               {/* Tail */}
               <span
-                className="block h-[2px] sm:h-[2.5px] md:h-[3px] w-[26vw] sm:w-[20vw] md:w-[16vw] rounded-full bg-gradient-to-r from-[rgba(255,255,255,0)] via-[rgba(255,255,255,0.95)] to-[color:var(--deco-gold)] shadow-[0_0_18px_rgba(255,255,255,0.95),0_0_36px_rgba(212,175,55,0.75),0_0_60px_rgba(255,255,255,0.65)] mix-blend-plus-lighter"
+                className="block h-[2px] sm:h-[2.5px] md:h-[3px] w-[26vw] sm:w-[20vw] md:w-[16vw] rounded-full bg-gradient-to-r from-[rgba(255,255,255,0)] via-[rgba(255,255,255,0.9)] to-[color:var(--accent-blue)] shadow-[0_0_18px_rgba(255,255,255,0.8),0_0_36px_rgba(107,163,208,0.6),0_0_60px_rgba(255,255,255,0.5)] mix-blend-plus-lighter"
                 style={{
                   animation: "star-flicker 600ms ease-in-out infinite",
                 }}
               />
               {/* Core head */}
               <span
-                className="absolute right-0 top-1/2 block h-2 w-2 -translate-y-1/2 rounded-full shadow-[0_0_16px_rgba(255,255,255,0.95),0_0_28px_rgba(212,175,55,0.8),0_0_70px_rgba(255,255,255,0.75)] mix-blend-plus-lighter"
+                className="absolute right-0 top-1/2 block h-2 w-2 -translate-y-1/2 rounded-full shadow-[0_0_16px_rgba(255,255,255,0.9),0_0_28px_rgba(107,163,208,0.7),0_0_70px_rgba(255,255,255,0.6)] mix-blend-plus-lighter"
                 style={{
                   background:
-                    "radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0) 75%)",
+                    "radial-gradient(circle at 50% 50%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 40%, rgba(107,163,208,0.6) 60%, rgba(107,163,208,0) 75%)",
                   animation: "star-flicker 500ms ease-in-out infinite",
                 }}
               />
@@ -407,15 +467,15 @@ const TimeCell = ({ label, value, pending = false, delay = 0 }: TimeCellProps) =
 
   return (
     <div 
-      className={`rounded-2xl border border-[color:var(--deco-gold)] bg-[color:rgba(212,175,55,0.08)] px-4 py-5 transition-all duration-500 ease-out sm:px-6 sm:py-7 ${
+      className={`transition-all duration-500 ease-out ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="countdown-number tick text-4xl font-semibold tracking-wide text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl lg:text-7xl">
+      <div className="countdown-number tick text-4xl font-bold tracking-wide text-[color:var(--primary-navy)] sm:text-5xl md:text-6xl lg:text-7xl">
         {displayValue}
       </div>
-      <div className="mt-3 text-xs uppercase tracking-[0.25em] text-[color:rgba(15,17,19,0.6)]">
+      <div className="mt-4 text-xs uppercase tracking-[0.25em] text-[color:var(--text-gray)] font-medium">
         {label}
       </div>
     </div>

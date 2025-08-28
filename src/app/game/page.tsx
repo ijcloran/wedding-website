@@ -118,7 +118,7 @@ const GamePage = () => {
     }
   };
 
-  const shuffleAnswers = (question: TriviaQuestion) => {
+  const shuffleAnswers = () => {
     const answers = ["Lily", "Isaac"];
     return answers; // Always keep Lily on top, Isaac on bottom
   };
@@ -225,7 +225,7 @@ const GamePage = () => {
 
   useEffect(() => {
     if (questions.length > 0 && currentQuestionIndex < questions.length) {
-      setAllAnswers(shuffleAnswers(questions[currentQuestionIndex]));
+      setAllAnswers(shuffleAnswers());
     }
   }, [currentQuestionIndex, questions]);
 
@@ -235,38 +235,56 @@ const GamePage = () => {
 
   if (gameState === "start") {
     return (
-      <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-8 px-6 py-16 text-center">
-        <div className="mb-4">
-          <Link 
-            href="/"
-            className="text-sm text-[color:rgba(15,17,19,0.6)] hover:text-[color:var(--deco-gold)] transition-colors"
-          >
-            ← Back to Wedding
-          </Link>
+      <main className="deco-bg relative min-h-screen flex flex-col items-center justify-center px-6 py-16 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)]">
+        {/* Classic decorative border */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[color:var(--accent-blue)] to-transparent"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[color:var(--accent-blue)] to-transparent"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-transparent via-[color:var(--accent-blue)] to-transparent"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-1 bg-gradient-to-b from-transparent via-[color:var(--accent-blue)] to-transparent"></div>
         </div>
         
-        <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl">
-          Wedding Trivia
-        </h1>
-        
-        <p className="max-w-md text-[color:rgba(15,17,19,0.7)]">
-          How many questions can you answer correctly in 60 seconds?
-        </p>
-        
-        <div className="flex gap-4">
-          <button
-            onClick={startGame}
-            className="px-8 py-4 bg-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.9)] transition-colors text-lg"
-          >
-            Start Game
-          </button>
+        <div className="relative z-10 max-w-2xl mx-auto space-y-8">
+          <div className="mb-6">
+            <Link 
+              href="/"
+              className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--primary-blue)] transition-colors inline-flex items-center gap-2"
+            >
+              ← Back to Wedding
+            </Link>
+          </div>
           
-          <button
-            onClick={() => setGameState("leaderboard")}
-            className="px-8 py-4 border border-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.1)] transition-colors text-lg"
-          >
-            Leaderboard
-          </button>
+          <div className="space-y-6">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light">
+              Wedding Trivia
+            </h1>
+            
+            <div className="flex items-center justify-center space-x-4">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
+              <div className="w-2 h-2 bg-[color:var(--primary-blue)] rounded-full"></div>
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
+            </div>
+            
+            <p className="max-w-md mx-auto text-[color:var(--text-gray)] text-lg leading-relaxed">
+              How many questions can you answer correctly in 60 seconds?
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={startGame}
+              className="px-8 py-4 bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] text-[color:var(--pure-white)] font-semibold rounded-full hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+            >
+              Start Game
+            </button>
+            
+            <button
+              onClick={() => setGameState("leaderboard")}
+              className="px-8 py-4 bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+            >
+              Leaderboard
+            </button>
+          </div>
         </div>
       </main>
     );
@@ -274,8 +292,11 @@ const GamePage = () => {
 
   if (gameState === "loading") {
     return (
-      <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-6 px-6 py-16 text-center">
-        <div className="text-2xl text-[color:var(--deco-ink)]">Loading questions...</div>
+      <main className="flex min-h-screen items-center justify-center px-6 py-16">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 mx-auto border-4 border-[color:var(--light-blue)] border-t-[color:var(--primary-blue)] rounded-full animate-spin"></div>
+          <div className="text-xl text-[color:var(--primary-navy)] font-medium">Loading questions...</div>
+        </div>
       </main>
     );
   }
@@ -284,43 +305,43 @@ const GamePage = () => {
     return (
       <main className="flex min-h-screen flex-col justify-center px-4 py-8 sm:px-6">
         <div className="mx-auto w-full max-w-2xl">
-          <div className="mb-6 flex items-center justify-between">
-            <div className="text-lg font-semibold text-[color:var(--deco-ink)]">
+          <div className="mb-8 flex items-center justify-between bg-[color:var(--pure-white)] rounded-2xl p-4 shadow-lg border border-[color:var(--border-blue)]">
+            <div className="text-lg font-bold text-[color:var(--primary-navy)]">
               Score: {score}
             </div>
             {streak >= 2 && (
-              <div className="text-lg font-semibold text-[color:var(--deco-gold)]">
+              <div className="text-lg font-bold text-[color:var(--accent-blue)] bg-[color:var(--light-blue)] px-3 py-1 rounded-full">
                 🔥 {streak} streak!
               </div>
             )}
-            <div className="text-lg font-semibold text-[color:var(--deco-ink)]">
+            <div className="text-lg font-bold text-[color:var(--primary-navy)]">
               Time: {timeLeft}s
             </div>
           </div>
 
-          <div className="deco-card mb-8 p-6 rounded-2xl">
-            <div className="mb-4 text-sm uppercase tracking-wide text-[color:rgba(15,17,19,0.6)]">
+          <div className="deco-card mb-8 p-8 rounded-2xl">
+            <div className="mb-6 text-sm uppercase tracking-wide text-[color:var(--accent-blue)] font-medium">
               {currentQuestion.category}
             </div>
-            <h2 className="text-xl font-medium text-[color:var(--deco-ink)] leading-tight">
+            <h2 className="text-2xl font-semibold text-[color:var(--primary-navy)] leading-tight">
               {currentQuestion.question}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-4">
             {allAnswers.map((answer, index) => {
-              let buttonClass = "p-4 text-left rounded-xl border transition-colors ";
+              let buttonClass = "p-5 text-left rounded-xl border transition-all duration-300 font-medium ";
               
               if (showResult) {
                 if (answer === currentQuestion.correct_answer) {
-                  buttonClass += "border-green-500 bg-green-100 text-green-800";
+                  buttonClass += "border-emerald-500 bg-emerald-50 text-emerald-800 shadow-lg";
                 } else if (answer === selectedAnswer) {
-                  buttonClass += "border-red-500 bg-red-100 text-red-800";
+                  buttonClass += "border-rose-500 bg-rose-50 text-rose-800 shadow-lg";
                 } else {
-                  buttonClass += "border-[color:rgba(212,175,55,0.3)] bg-[color:rgba(212,175,55,0.05)] text-[color:rgba(15,17,19,0.5)]";
+                  buttonClass += "border-[color:var(--border-blue)] bg-[color:var(--soft-gray)] text-[color:var(--text-gray)] opacity-60";
                 }
               } else {
-                buttonClass += "border-[color:rgba(212,175,55,0.3)] bg-[color:rgba(212,175,55,0.05)] text-[color:var(--deco-ink)] hover:border-[color:var(--deco-gold)] hover:bg-[color:rgba(212,175,55,0.1)]";
+                buttonClass += "border-[color:var(--border-blue)] bg-[color:var(--pure-white)] text-[color:var(--primary-navy)] hover:border-[color:var(--accent-blue)] hover:bg-[color:var(--light-blue)] hover:text-[color:var(--primary-blue)] hover:shadow-lg hover:-translate-y-1";
               }
 
               return (
@@ -342,49 +363,51 @@ const GamePage = () => {
 
   if (gameState === "save-score") {
     return (
-      <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-8 px-6 py-16 text-center">
-        <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl">
-          Great Job!
-        </h1>
-        
-        <div className="deco-card p-8 rounded-2xl">
-          <div className="text-3xl font-semibold text-[color:var(--deco-gold)] mb-2">
-            {score}
-          </div>
-          <div className="text-lg text-[color:var(--deco-ink)]">
-            Questions Correct
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <p className="text-[color:rgba(15,17,19,0.7)]">
-            Want to save your score to the leaderboard?
-          </p>
+      <main className="flex min-h-screen items-center justify-center px-6 py-16">
+        <div className="text-center space-y-8 max-w-md mx-auto">
+          <h1 className="text-5xl sm:text-6xl font-serif leading-tight text-[color:var(--primary-navy)] font-light">
+            Great Job!
+          </h1>
           
-          <input
-            type="text"
-            placeholder="Enter your initials"
-            value={initials}
-            onChange={(e) => setInitials(e.target.value.slice(0, 3))}
-            className="px-4 py-2 border border-[color:var(--deco-gold)] rounded-xl bg-[color:rgba(212,175,55,0.05)] text-center uppercase tracking-wider text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--deco-gold)]"
-            maxLength={3}
-          />
-        </div>
+          <div className="deco-card p-10 rounded-2xl">
+            <div className="text-5xl font-bold text-[color:var(--button-blue)] mb-3">
+              {score}
+            </div>
+            <div className="text-xl text-[color:var(--primary-navy)] font-medium">
+              Questions Correct
+            </div>
+          </div>
 
-        <div className="flex gap-4">
-          <button
-            onClick={saveScore}
-            className="px-6 py-3 bg-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.9)] transition-colors"
-          >
-            Save Score
-          </button>
-          
-          <button
-            onClick={skipSave}
-            className="px-6 py-3 border border-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.1)] transition-colors"
-          >
-            Skip
-          </button>
+          <div className="space-y-6">
+            <p className="text-[color:var(--text-gray)] text-lg">
+              Want to save your score to the leaderboard?
+            </p>
+            
+            <input
+              type="text"
+              placeholder="Enter your initials"
+              value={initials}
+              onChange={(e) => setInitials(e.target.value.slice(0, 3))}
+              className="px-6 py-4 border border-[color:var(--border-blue)] rounded-xl bg-[color:var(--pure-white)] text-center uppercase tracking-wider text-lg font-medium focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-blue)] focus:border-[color:var(--primary-blue)] shadow-lg"
+              maxLength={3}
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={saveScore}
+              className="px-8 py-4 bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] text-[color:var(--pure-white)] font-semibold rounded-full hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+            >
+              Save Score
+            </button>
+            
+            <button
+              onClick={skipSave}
+              className="px-8 py-4 bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+            >
+              Skip
+            </button>
+          </div>
         </div>
       </main>
     );
@@ -392,104 +415,123 @@ const GamePage = () => {
 
   if (gameState === "leaderboard") {
     return (
-      <main className="grid min-h-screen grid-cols-1 content-start justify-items-center gap-8 px-6 py-16 text-center">
-        <div className="mb-4">
-          <button 
-            onClick={() => setGameState("start")}
-            className="text-sm text-[color:rgba(15,17,19,0.6)] hover:text-[color:var(--deco-gold)] transition-colors"
-          >
-            ← Back
-          </button>
-        </div>
-        
-        <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl">
-          Leaderboard
-        </h1>
-        
-        <div className="w-full max-w-md space-y-3">
-          {topScores && topScores.length > 0 ? (
-            topScores.map((scoreEntry, index) => (
-              <div key={scoreEntry._id} className="deco-card p-4 rounded-xl flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <div className="text-lg font-semibold text-[color:var(--deco-gold)] w-8">
-                    #{index + 1}
-                  </div>
-                  <div className="text-lg font-semibold text-[color:var(--deco-ink)]">
-                    {scoreEntry.initials}
-                  </div>
-                </div>
-                <div className="text-lg font-semibold text-[color:var(--deco-ink)]">
-                  {scoreEntry.score}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="text-[color:rgba(15,17,19,0.6)]">
-              No scores yet. Be the first to play!
+      <main className="min-h-screen flex flex-col items-center px-6 py-16">
+        <div className="w-full max-w-2xl mx-auto space-y-8">
+          <div className="text-center space-y-6">
+            <div>
+              <button 
+                onClick={() => setGameState("start")}
+                className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--primary-blue)] transition-colors inline-flex items-center gap-2"
+              >
+                ← Back
+              </button>
             </div>
-          )}
-        </div>
+            
+            <h1 className="text-5xl sm:text-6xl font-serif leading-tight text-[color:var(--primary-navy)] font-light">
+              Leaderboard
+            </h1>
+            
+            <div className="flex items-center justify-center space-x-4">
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
+              <div className="w-2 h-2 bg-[color:var(--primary-blue)] rounded-full"></div>
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            {topScores && topScores.length > 0 ? (
+              topScores.map((scoreEntry, index) => (
+                <div key={scoreEntry._id} className="deco-card p-6 rounded-2xl flex justify-between items-center hover:shadow-xl transition-all duration-300">
+                  <div className="flex items-center gap-4">
+                    <div className={`text-xl font-bold w-10 h-10 rounded-full flex items-center justify-center text-[color:var(--pure-white)] ${
+                      index === 0 ? 'bg-gradient-to-r from-yellow-400 to-yellow-600' :
+                      index === 1 ? 'bg-gradient-to-r from-gray-300 to-gray-500' :
+                      index === 2 ? 'bg-gradient-to-r from-amber-600 to-amber-800' :
+                      'bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)]'
+                    }`}>
+                      #{index + 1}
+                    </div>
+                    <div className="text-2xl font-bold text-[color:var(--primary-navy)] uppercase tracking-wider">
+                      {scoreEntry.initials}
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-[color:var(--button-blue)]">
+                    {scoreEntry.score}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center p-12 text-[color:var(--text-gray)] text-lg">
+                No scores yet. Be the first to play!
+              </div>
+            )}
+          </div>
 
-        <button
-          onClick={() => setGameState("start")}
-          className="px-8 py-4 bg-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.9)] transition-colors text-lg"
-        >
-          Play Game
-        </button>
+          <div className="text-center pt-8">
+            <button
+              onClick={() => setGameState("start")}
+              className="px-8 py-4 bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] text-[color:var(--pure-white)] font-semibold rounded-full hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 text-lg shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+            >
+              Play Game
+            </button>
+          </div>
+        </div>
       </main>
     );
   }
 
   if (gameState === "gameover") {
     return (
-      <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-8 px-6 py-16 text-center">
-        <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl">
-          Game Over!
-        </h1>
-        
-        <div className="deco-card p-8 rounded-2xl">
-          <div className="text-3xl font-semibold text-[color:var(--deco-gold)] mb-2">
-            {score}
-          </div>
-          <div className="text-lg text-[color:var(--deco-ink)]">
-            Questions Correct
-          </div>
-          {initials && (
-            <div className="mt-4 text-sm text-[color:rgba(15,17,19,0.6)]">
-              Score saved for {initials.toUpperCase()}
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <button
-            onClick={copyScore}
-            className="px-6 py-3 bg-[color:rgba(212,175,55,0.15)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.25)] transition-colors flex items-center gap-2 mx-auto"
-          >
-            {copied ? "✅ Copied!" : "📋 Share Score"}
-          </button>
+      <main className="flex min-h-screen items-center justify-center px-6 py-16">
+        <div className="text-center space-y-8 max-w-lg mx-auto">
+          <h1 className="text-5xl sm:text-6xl font-serif leading-tight text-[color:var(--primary-navy)] font-light">
+            Game Over!
+          </h1>
           
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="deco-card p-10 rounded-2xl">
+            <div className="text-5xl font-bold text-[color:var(--button-blue)] mb-3">
+              {score}
+            </div>
+            <div className="text-xl text-[color:var(--primary-navy)] font-medium">
+              Questions Correct
+            </div>
+            {initials && (
+              <div className="mt-6 text-base text-[color:var(--text-gray)] font-medium">
+                Score saved for {initials.toUpperCase()}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-6">
             <button
-              onClick={resetGame}
-              className="px-6 py-3 bg-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.9)] transition-colors"
+              onClick={copyScore}
+              className="px-8 py-4 bg-[color:var(--light-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--accent-blue)] hover:text-[color:var(--pure-white)] transition-all duration-300 flex items-center gap-3 mx-auto shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/20 hover:-translate-y-1"
             >
-              Play Again
+              {copied ? "✅ Copied!" : "📋 Share Score"}
             </button>
             
-            <button
-              onClick={() => setGameState("leaderboard")}
-              className="px-6 py-3 border border-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.1)] transition-colors"
-            >
-              Leaderboard
-            </button>
-            
-            <Link 
-              href="/"
-              className="px-6 py-3 border border-[color:var(--deco-gold)] text-[color:var(--deco-ink)] font-semibold rounded-xl hover:bg-[color:rgba(212,175,55,0.1)] transition-colors inline-block"
-            >
-              Back Home
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={resetGame}
+                className="px-8 py-4 bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] text-[color:var(--pure-white)] font-semibold rounded-full hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+              >
+                Play Again
+              </button>
+              
+              <button
+                onClick={() => setGameState("leaderboard")}
+                className="px-8 py-4 bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+              >
+                Leaderboard
+              </button>
+              
+              <Link 
+                href="/"
+                className="px-8 py-4 bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1 inline-block"
+              >
+                Back Home
+              </Link>
+            </div>
           </div>
         </div>
       </main>

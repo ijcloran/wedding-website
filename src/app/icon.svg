@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#e6cf86"/>
-      <stop offset="1" stop-color="#d4af37"/>
+    <linearGradient id="blueGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a4c2db"/>
+      <stop offset="1" stop-color="#8fbce8"/>
     </linearGradient>
     <radialGradient id="diamond" cx="0.5" cy="0.3" r="0.4">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="0.5" stop-color="#f8f8f8"/>
       <stop offset="1" stop-color="#e0e0e0"/>
     </radialGradient>
+    <radialGradient id="backgroundGradient" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.7" stop-color="#f8f9fa"/>
+      <stop offset="1" stop-color="#e1ecf7"/>
+    </radialGradient>
   </defs>
-  <!-- Cream background -->
-  <rect x="0" y="0" width="512" height="512" rx="64" fill="#f1ebe4"/>
+  <!-- Elegant white-blue gradient background -->
+  <rect x="0" y="0" width="512" height="512" rx="64" fill="url(#backgroundGradient)"/>
   
-  <!-- Wedding ring -->
-  <circle cx="256" cy="256" r="120" fill="none" stroke="url(#g)" stroke-width="40"/>
+  <!-- Subtle decorative circles -->
+  <circle cx="150" cy="150" r="30" fill="#e1ecf7" opacity="0.6"/>
+  <circle cx="362" cy="362" r="25" fill="#d1e4f0" opacity="0.5"/>
   
-  <!-- Inner highlight -->
-  <circle cx="256" cy="256" r="100" fill="none" stroke="#f8f4e6" stroke-width="4" opacity="0.6"/>
+  <!-- Wedding ring with blue gradient -->
+  <circle cx="256" cy="256" r="120" fill="none" stroke="url(#blueGradient)" stroke-width="40"/>
+  
+  <!-- Inner highlight with soft blue -->
+  <circle cx="256" cy="256" r="100" fill="none" stroke="#e1ecf7" stroke-width="6" opacity="0.8"/>
   
   <!-- Diamond on ring -->
-  <ellipse cx="256" cy="136" rx="16" ry="20" fill="url(#diamond)"/>
+  <ellipse cx="256" cy="136" rx="18" ry="22" fill="url(#diamond)"/>
   
-  <!-- Diamond sparkles -->
-  <g fill="#ffffff" opacity="0.8">
-    <circle cx="246" cy="126" r="2"/>
-    <circle cx="266" cy="130" r="1.5"/>
-    <circle cx="260" cy="146" r="1"/>
+  <!-- Enhanced diamond sparkles -->
+  <g fill="#ffffff" opacity="0.9">
+    <circle cx="244" cy="124" r="2.5"/>
+    <circle cx="268" cy="128" r="2"/>
+    <circle cx="258" cy="148" r="1.5"/>
+  </g>
+  
+  <!-- Additional subtle sparkles -->
+  <g fill="#8fbce8" opacity="0.4">
+    <circle cx="200" cy="200" r="3"/>
+    <circle cx="312" cy="312" r="2"/>
+    <circle cx="180" cy="332" r="2.5"/>
   </g>
 </svg>
