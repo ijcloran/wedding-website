@@ -13,7 +13,7 @@ const Home = () => {
   
   return (
     <main 
-      className="deco-bg relative h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)] overflow-hidden"
+      className="deco-bg relative h-screen flex flex-col items-center justify-between px-4 py-6 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)] overflow-hidden"
       style={{
         backgroundImage: backgroundData?.url 
           ? `url(${backgroundData.url}), linear-gradient(135deg, var(--pure-white) 0%, var(--light-blue) 50%, var(--pure-white) 100%)`
@@ -40,50 +40,54 @@ const Home = () => {
         </div>
       </div>
       
-      <div className="relative z-10 max-w-4xl mx-auto space-y-8">
+      <div className="flex-1"></div>
+      
+      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col justify-center space-y-2 sm:space-y-8">
         {/* Main heading with elegant styling */}
-        <div className="space-y-4 bg-white/25 backdrop-blur-sm rounded-2xl px-4 py-6 mx-4 sm:px-8 sm:py-8 sm:mx-0">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+        <div className="space-y-2 sm:space-y-4 bg-white/25 backdrop-blur-sm rounded-2xl px-4 py-3 mx-2 sm:px-8 sm:py-8 sm:mx-0">
+          <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6">
               <span className="whitespace-nowrap">Lily House</span>
-              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[color:var(--accent-blue)] font-normal">
+              <span className="text-lg sm:text-3xl md:text-4xl lg:text-5xl text-[color:var(--accent-blue)] font-normal">
                 &
               </span>
               <span className="whitespace-nowrap">Isaac Cloran</span>
             </div>
           </h1>
           
-          <div className="flex items-center justify-center space-x-4 my-6">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
-            <div className="w-2 h-2 bg-[color:var(--primary-blue)] rounded-full shadow-sm"></div>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
+          <div className="flex items-center justify-center space-x-4 my-2 sm:my-6">
+            <div className="h-px w-8 sm:w-16 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
+            <div className="w-1 h-1 sm:w-2 sm:h-2 bg-[color:var(--primary-blue)] rounded-full shadow-sm"></div>
+            <div className="h-px w-8 sm:w-16 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
           </div>
           
-          <p className="text-sm md:text-base uppercase tracking-[0.3em] text-[color:var(--primary-navy)] font-semibold drop-shadow-sm">
+          <p className="text-xs sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.3em] text-[color:var(--primary-navy)] font-semibold drop-shadow-sm">
             June 12, 2026 · Indianapolis, IN
           </p>
         </div>
 
         {/* Countdown component */}
         <Countdown />
+      </div>
 
-        {/* Navigation links with new styling */}
-        <div className="pt-8 space-y-4">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href="/gallery"
-              className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium text-[color:var(--pure-white)] bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
-            >
-              Our Gallery
-            </Link>
-            
-            <Link 
-              href="/game"
-              className="inline-flex items-center gap-3 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
-            >
-              Wedding Trivia
-            </Link>
-          </div>
+      <div className="flex-1"></div>
+
+      {/* Navigation links at bottom */}
+      <div className="relative z-10 w-full px-2 pb-2 sm:px-0 sm:pb-8">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-md sm:max-w-none mx-auto">
+          <Link 
+            href="/gallery"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--pure-white)] bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+          >
+            Our Gallery
+          </Link>
+          
+          <Link 
+            href="/game"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+          >
+            Wedding Trivia
+          </Link>
         </div>
       </div>
       
@@ -282,8 +286,10 @@ const Countdown = () => {
 
   return (
     <div className="w-full max-w-5xl">
-      {/* View Mode Toggle */}
-      <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
+      {/* View Mode Toggle - Hidden on mobile */}
+      <div className="hidden sm:block">
+        <ViewModeToggle currentMode={viewMode} onModeChange={setViewMode} />
+      </div>
       
       {/* Countdown Display */}
       <div 
