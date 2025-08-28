@@ -5,23 +5,28 @@
       <stop offset="0" stop-color="#e6cf86"/>
       <stop offset="1" stop-color="#d4af37"/>
     </linearGradient>
+    <radialGradient id="diamond" cx="0.5" cy="0.3" r="0.4">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#f8f8f8"/>
+      <stop offset="1" stop-color="#e0e0e0"/>
+    </radialGradient>
   </defs>
   <!-- Cream background -->
   <rect x="0" y="0" width="512" height="512" rx="64" fill="#f1ebe4"/>
-  <!-- Deco double border -->
-  <rect x="28" y="28" width="456" height="456" rx="48" fill="none" stroke="url(#g)" stroke-width="10"/>
-  <rect x="52" y="52" width="408" height="408" rx="36" fill="none" stroke="url(#g)" stroke-width="6" opacity="0.9"/>
-  <!-- Monogram -->
-  <g fill="url(#g)">
-    <!-- I -->
-    <rect x="168" y="160" width="28" height="192" rx="6" />
-    <rect x="140" y="152" width="84" height="20" rx="10" />
-    <rect x="140" y="340" width="84" height="20" rx="10" />
-    <!-- ampersand stylized with circle + cut -->
-    <circle cx="256" cy="256" r="70" fill="none" stroke="url(#g)" stroke-width="26" />
-    <rect x="244" y="216" width="24" height="128" rx="12" />
-    <!-- L -->
-    <rect x="316" y="160" width="28" height="168" rx="6" />
-    <rect x="316" y="320" width="96" height="28" rx="10" />
+  
+  <!-- Wedding ring -->
+  <circle cx="256" cy="256" r="120" fill="none" stroke="url(#g)" stroke-width="40"/>
+  
+  <!-- Inner highlight -->
+  <circle cx="256" cy="256" r="100" fill="none" stroke="#f8f4e6" stroke-width="4" opacity="0.6"/>
+  
+  <!-- Diamond on ring -->
+  <ellipse cx="256" cy="136" rx="16" ry="20" fill="url(#diamond)"/>
+  
+  <!-- Diamond sparkles -->
+  <g fill="#ffffff" opacity="0.8">
+    <circle cx="246" cy="126" r="2"/>
+    <circle cx="266" cy="130" r="1.5"/>
+    <circle cx="260" cy="146" r="1"/>
   </g>
 </svg>

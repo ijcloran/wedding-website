@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
+import Link from "next/link";
 
 const targetDate = new Date("2026-06-12T15:30:00-04:00");
 
@@ -9,14 +10,23 @@ const Home = () => {
   return (
     <main className="grid min-h-screen grid-cols-1 content-center justify-items-center gap-6 px-6 py-16 text-center">
       <h1 className="text-4xl font-serif leading-tight text-[color:var(--deco-ink)] sm:text-5xl md:text-6xl lg:text-7xl">
-        Isaac Cloran
-        <span className="mx-3 inline-block align-middle text-xl text-gray-400 sm:text-2xl md:text-3xl">&</span>
         Lily House
+        <span className="mx-3 inline-block align-middle text-xl text-gray-400 sm:text-2xl md:text-3xl">&</span>
+        Isaac Cloran
       </h1>
       <p className="mt-2 uppercase tracking-[0.18em] text-[11px] text-[color:rgba(15,17,19,0.6)] sm:tracking-[0.25em] sm:text-xs md:text-sm">
         June 12, 2026 · Indianapolis, IN
       </p>
       <Countdown />
+      <div className="mt-8">
+        <Link 
+          href="/game"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-[0.15em] text-[color:rgba(15,17,19,0.6)] hover:text-[color:var(--deco-gold)] transition-colors border border-[color:rgba(212,175,55,0.3)] rounded-xl hover:border-[color:var(--deco-gold)] hover:bg-[color:rgba(212,175,55,0.05)]"
+        >
+          <span>🎯</span>
+          Wedding Trivia
+        </Link>
+      </div>
       <ShootingStars />
     </main>
   );
