@@ -18,7 +18,7 @@ const Home = () => {
         backgroundImage: backgroundData?.url 
           ? `url(${backgroundData.url}), linear-gradient(135deg, var(--pure-white) 0%, var(--light-blue) 50%, var(--pure-white) 100%)`
           : undefined,
-        backgroundSize: backgroundData?.url ? 'contain, cover' : undefined,
+        backgroundSize: backgroundData?.url ? 'cover, cover' : undefined,
         backgroundPosition: backgroundData?.url ? 'center, center' : undefined,
         backgroundRepeat: backgroundData?.url ? 'no-repeat, no-repeat' : undefined,
       }}
@@ -44,7 +44,7 @@ const Home = () => {
       
       <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col justify-center space-y-2 sm:space-y-8">
         {/* Main heading with elegant styling */}
-        <div className="space-y-2 sm:space-y-4 bg-white/25 backdrop-blur-sm rounded-2xl px-4 py-3 mx-2 sm:px-8 sm:py-8 sm:mx-0">
+        <div className="space-y-2 sm:space-y-4 bg-white/3 backdrop-blur-sm rounded-2xl px-6 py-4 inline-block mx-auto">
           <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
             <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6">
               <span className="whitespace-nowrap">Lily House</span>
