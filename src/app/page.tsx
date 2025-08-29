@@ -44,7 +44,7 @@ const Home = () => {
       
       <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col justify-center space-y-1.5 sm:space-y-8">
         {/* Main heading with elegant styling */}
-        <div className="home-heading space-y-1.5 sm:space-y-4 bg-white/3 backdrop-blur-sm rounded-2xl px-4 py-3 sm:px-6 sm:py-4 inline-block mx-auto">
+        <div className="home-heading space-y-1.5 sm:space-y-4 bg-white/5 backdrop-blur-xs rounded-2xl px-4 py-3 sm:px-6 sm:py-4 inline-block mx-auto border border-white/10">
           <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
             <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6">
               <span className="whitespace-nowrap">Lily House</span>
@@ -84,7 +84,7 @@ const Home = () => {
           
           <Link 
             href="/game"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-white/10 backdrop-blur-xs border border-white/20 hover:bg-white/20 hover:border-white/30 hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
           >
             Wedding Trivia
           </Link>
@@ -121,7 +121,7 @@ const ViewModeToggle = ({ currentMode, onModeChange }: ViewModeToggleProps) => {
           className={`px-4 py-2.5 text-xs font-medium uppercase tracking-[0.1em] rounded-full border transition-all duration-300 ${
             currentMode === mode.key
               ? "border-[color:var(--button-blue)] bg-[color:var(--button-blue)] text-[color:var(--pure-white)] shadow-lg shadow-[color:var(--button-blue)]/25"
-              : "border-[color:var(--border-blue)] bg-[color:var(--pure-white)] text-[color:var(--text-gray)] hover:border-[color:var(--accent-blue)] hover:bg-[color:var(--light-blue)] hover:text-[color:var(--button-blue)]"
+              : "border-white/20 bg-white/10 backdrop-blur-xs text-[color:var(--text-gray)] hover:border-white/30 hover:bg-white/20 hover:text-[color:var(--button-blue)]"
           }`}
         >
           {mode.label}

@@ -40,3 +40,45 @@ export const getTodaysScores = query({
       .collect();
   },
 });
+
+export const addGameResponse = mutation({
+  args: {
+    sessionId: v.string(),
+    initials: v.optional(v.string()),
+    questionIndex: v.number(),
+    questionText: v.string(),
+    questionCategory: v.string(),
+    userAnswer: v.string(),
+    lilyIsaacAnswer: v.string(),
+    isMatch: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const completedAt = Date.now();
+    
+    await ctx.db.insert("gameResponses", {
+      ...args,
+      completedAt,
+    });
+  },
+});
+
+export const updateResponsesWithInitials = mutation({
+  args: {
+    sessionId: v.string(),
+    initials: v.string(),
+  },
+  handler: async (ctx, { sessionId, initials }) => {
+    // Find all responses for this session
+    const responses = await ctx.db
+      .query("gameResponses")
+      .withIndex("by_session", q => q.eq("sessionId", sessionId))
+      .collect();
+    
+    // Update each response with initials
+    for (const response of responses) {
+      await ctx.db.patch(response._id, {
+        initials: initials.toUpperCase().slice(0, 3),
+      });
+    }
+  },
+});

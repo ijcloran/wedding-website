@@ -7,6 +7,18 @@ export default defineSchema({
     score: v.number(),
     completedAt: v.number(),
   }).index("by_score", ["score"]),
+  gameResponses: defineTable({
+    sessionId: v.string(),
+    initials: v.optional(v.string()),
+    questionIndex: v.number(),
+    questionText: v.string(),
+    questionCategory: v.string(),
+    userAnswer: v.string(),
+    lilyIsaacAnswer: v.string(),
+    isMatch: v.boolean(),
+    completedAt: v.number(),
+  }).index("by_session", ["sessionId"])
+    .index("by_question", ["questionIndex"]),
   photos: defineTable({
     title: v.optional(v.string()), // Make optional since existing data might not have it
     description: v.optional(v.string()),

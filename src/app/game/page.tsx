@@ -102,8 +102,11 @@ const GamePage = () => {
   const [allAnswers, setAllAnswers] = useState<string[]>([]);
   const [streak, setStreak] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [sessionId, setSessionId] = useState("");
 
   const addScore = useMutation(api.gameScores.addScore);
+  const addGameResponse = useMutation(api.gameScores.addGameResponse);
+  const updateResponsesWithInitials = useMutation(api.gameScores.updateResponsesWithInitials);
   const topScores = useQuery(api.gameScores.getTopScores, { limit: 10 });
 
   const fetchQuestions = async () => {
@@ -133,19 +136,39 @@ const GamePage = () => {
       setTimeLeft(GAME_DURATION);
       setSelectedAnswer(null);
       setShowResult(false);
+      setSessionId(Date.now().toString() + Math.random().toString(36).substr(2, 9));
     } else {
       alert("Failed to load questions. Please try again.");
       setGameState("start");
     }
   };
 
-  const selectAnswer = (answer: string) => {
+  const selectAnswer = async (answer: string) => {
     if (selectedAnswer || showResult) return;
     
     setSelectedAnswer(answer);
     setShowResult(true);
     
-    if (answer === questions[currentQuestionIndex]?.correct_answer) {
+    const currentQ = questions[currentQuestionIndex];
+    const isMatch = answer === currentQ?.correct_answer;
+    
+    // Save response immediately to database
+    try {
+      await addGameResponse({
+        sessionId,
+        initials: undefined, // Will be filled in later if user saves score
+        questionIndex: currentQuestionIndex,
+        questionText: currentQ?.question || "",
+        questionCategory: currentQ?.category || "",
+        userAnswer: answer,
+        lilyIsaacAnswer: currentQ?.correct_answer || "",
+        isMatch
+      });
+    } catch (error) {
+      console.error("Failed to save response:", error);
+    }
+    
+    if (isMatch) {
       setScore(prev => prev + 1);
       setStreak(prev => prev + 1);
     } else {
@@ -182,12 +205,21 @@ const GamePage = () => {
     setInitials("");
     setStreak(0);
     setCopied(false);
+    setSessionId("");
   };
 
   const saveScore = async () => {
     if (initials.trim()) {
       try {
+        // Save final score
         await addScore({ initials: initials.trim(), score });
+        
+        // Update all responses for this session with initials
+        await updateResponsesWithInitials({
+          sessionId,
+          initials: initials.trim()
+        });
+        
         setGameState("gameover");
       } catch (error) {
         console.error("Failed to save score:", error);
@@ -248,7 +280,7 @@ const GamePage = () => {
           <div className="mb-6">
             <Link 
               href="/"
-              className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--primary-blue)] transition-colors inline-flex items-center gap-2"
+              className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--button-blue)] transition-all duration-300 inline-flex items-center gap-2 bg-[color:var(--pure-white)]/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1"
             >
               ← Back to Wedding
             </Link>
@@ -419,12 +451,12 @@ const GamePage = () => {
         <div className="w-full max-w-2xl mx-auto space-y-8">
           <div className="text-center space-y-6">
             <div>
-              <button 
-                onClick={() => setGameState("start")}
-                className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--primary-blue)] transition-colors inline-flex items-center gap-2"
+              <Link 
+                href="/"
+                className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--button-blue)] transition-all duration-300 inline-flex items-center gap-2 bg-[color:var(--pure-white)]/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1"
               >
-                ← Back
-              </button>
+                ← Back to Wedding
+              </Link>
             </div>
             
             <h1 className="text-5xl sm:text-6xl font-serif leading-tight text-[color:var(--primary-navy)] font-light">
@@ -527,9 +559,9 @@ const GamePage = () => {
               
               <Link 
                 href="/"
-                className="px-8 py-4 bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] text-[color:var(--primary-navy)] font-semibold rounded-full hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1 inline-block"
+                className="text-sm text-[color:var(--text-gray)] hover:text-[color:var(--button-blue)] transition-all duration-300 inline-flex items-center gap-2 bg-[color:var(--pure-white)]/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1"
               >
-                Back Home
+                ← Back to Wedding
               </Link>
             </div>
           </div>
