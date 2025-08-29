@@ -190,6 +190,16 @@ body {
   60% { filter: brightness(0.85); }
 }
 
+/* Compact tweaks for short mobile screens */
+@media (max-height: 700px) {
+  .home-root { padding-top: 10px; padding-bottom: 10px; }
+  .home-root .countdown { padding: 10px 12px !important; }
+  .home-root .countdown-number { font-size: 1.75rem !important; }
+  .home-root .home-heading { padding: 8px 12px !important; }
+  .home-root .home-subtitle { font-size: 10px !important; letter-spacing: 0.08em; }
+  .home-root .home-actions a { padding: 8px 10px !important; }
+}
+
 /* Additional elegant components */
 .glass-morphism {
   background: rgba(255, 255, 255, 0.25);

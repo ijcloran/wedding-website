@@ -6,7 +6,7 @@ export default defineSchema({
     initials: v.string(),
     score: v.number(),
     completedAt: v.number(),
-  }),
+  }).index("by_score", ["score"]),
   photos: defineTable({
     title: v.optional(v.string()), // Make optional since existing data might not have it
     description: v.optional(v.string()),

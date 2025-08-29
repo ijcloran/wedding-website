@@ -22,6 +22,7 @@ export const getTopScores = query({
   handler: async (ctx, { limit = 10 }) => {
     return await ctx.db
       .query("gameScores")
+      .withIndex("by_score")
       .order("desc")
       .take(limit);
   },

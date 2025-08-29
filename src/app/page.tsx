@@ -13,7 +13,7 @@ const Home = () => {
   
   return (
     <main 
-      className="deco-bg relative h-screen flex flex-col items-center justify-between px-4 py-6 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)] overflow-hidden"
+      className="home-root deco-bg relative min-h-[100svh] flex flex-col items-center justify-between px-4 py-4 text-center bg-gradient-to-br from-[color:var(--pure-white)] via-[color:var(--light-blue)] to-[color:var(--pure-white)] overflow-hidden"
       style={{
         backgroundImage: backgroundData?.url 
           ? `url(${backgroundData.url}), linear-gradient(135deg, var(--pure-white) 0%, var(--light-blue) 50%, var(--pure-white) 100%)`
@@ -42,9 +42,9 @@ const Home = () => {
       
       <div className="flex-1"></div>
       
-      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col justify-center space-y-2 sm:space-y-8">
+      <div className="relative z-10 w-full max-w-4xl mx-auto flex flex-col justify-center space-y-1.5 sm:space-y-8">
         {/* Main heading with elegant styling */}
-        <div className="space-y-2 sm:space-y-4 bg-white/3 backdrop-blur-sm rounded-2xl px-6 py-4 inline-block mx-auto">
+        <div className="home-heading space-y-1.5 sm:space-y-4 bg-white/3 backdrop-blur-sm rounded-2xl px-4 py-3 sm:px-6 sm:py-4 inline-block mx-auto">
           <h1 className="text-2xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-[color:var(--primary-navy)] font-light drop-shadow-sm">
             <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6">
               <span className="whitespace-nowrap">Lily House</span>
@@ -55,13 +55,13 @@ const Home = () => {
             </div>
           </h1>
           
-          <div className="flex items-center justify-center space-x-4 my-2 sm:my-6">
+          <div className="flex items-center justify-center space-x-3 my-1.5 sm:my-6">
             <div className="h-px w-8 sm:w-16 bg-gradient-to-r from-transparent to-[color:var(--accent-blue)]"></div>
             <div className="w-1 h-1 sm:w-2 sm:h-2 bg-[color:var(--primary-blue)] rounded-full shadow-sm"></div>
             <div className="h-px w-8 sm:w-16 bg-gradient-to-l from-transparent to-[color:var(--accent-blue)]"></div>
           </div>
           
-          <p className="text-xs sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.3em] text-[color:var(--primary-navy)] font-semibold drop-shadow-sm">
+          <p className="home-subtitle text-[11px] sm:text-sm md:text-base uppercase tracking-[0.1em] sm:tracking-[0.3em] text-[color:var(--primary-navy)] font-semibold drop-shadow-sm">
             June 12, 2026 · Indianapolis, IN
           </p>
         </div>
@@ -73,18 +73,18 @@ const Home = () => {
       <div className="flex-1"></div>
 
       {/* Navigation links at bottom */}
-      <div className="relative z-10 w-full px-2 pb-2 sm:px-0 sm:pb-8">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-md sm:max-w-none mx-auto">
+      <div className="relative z-10 w-full px-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] sm:px-0 sm:pb-8">
+        <div className="home-actions flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center w-full max-w-md sm:max-w-none mx-auto">
           <Link 
             href="/gallery"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--pure-white)] bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--pure-white)] bg-gradient-to-r from-[color:var(--button-blue)] to-[color:var(--accent-blue)] hover:from-[color:var(--accent-blue)] hover:to-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--button-blue)]/25 hover:-translate-y-1"
           >
             Our Gallery
           </Link>
           
           <Link 
             href="/game"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-3 py-2 sm:px-8 sm:py-4 text-xs sm:text-sm uppercase tracking-[0.1em] sm:tracking-[0.15em] font-medium text-[color:var(--primary-navy)] bg-[color:var(--pure-white)] border border-[color:var(--border-blue)] hover:bg-[color:var(--light-blue)] hover:border-[color:var(--accent-blue)] hover:text-[color:var(--button-blue)] transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:shadow-[color:var(--accent-blue)]/10 hover:-translate-y-1"
           >
             Wedding Trivia
           </Link>
@@ -293,7 +293,7 @@ const Countdown = () => {
       
       {/* Countdown Display */}
       <div 
-        className={`countdown grid w-full gap-4 rounded-2xl px-6 py-8 text-center transition-all duration-500 ease-in-out sm:gap-6 sm:px-8 sm:py-10 ${
+        className={`countdown grid w-full gap-3 rounded-2xl px-4 py-6 text-center transition-all duration-500 ease-in-out sm:gap-6 sm:px-8 sm:py-10 ${
           gridCols === 1 ? "grid-cols-1" :
           gridCols === 2 ? "grid-cols-1 sm:grid-cols-2" :
           gridCols === 3 ? "grid-cols-1 sm:grid-cols-3" :
@@ -478,10 +478,10 @@ const TimeCell = ({ label, value, pending = false, delay = 0 }: TimeCellProps) =
       }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="countdown-number tick text-4xl font-bold tracking-wide text-[color:var(--primary-navy)] sm:text-5xl md:text-6xl lg:text-7xl">
+      <div className="countdown-number tick text-3xl font-bold tracking-wide text-[color:var(--primary-navy)] sm:text-5xl md:text-6xl lg:text-7xl">
         {displayValue}
       </div>
-      <div className="mt-4 text-xs uppercase tracking-[0.25em] text-[color:var(--text-gray)] font-medium">
+      <div className="mt-2 text-xs uppercase tracking-[0.25em] text-[color:var(--text-gray)] font-medium">
         {label}
       </div>
     </div>
