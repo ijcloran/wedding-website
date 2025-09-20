@@ -298,7 +298,7 @@ const GamePage = () => {
             </div>
             
             <p className="max-w-md mx-auto text-[color:var(--text-gray)] text-lg leading-relaxed">
-              How many questions can you answer correctly in 60 seconds?
+              How to play: you will have 60 seconds to answer as many questions as you can. Each question will be a choice between Lily and Isaac. The highest number of correct answers wins!
             </p>
           </div>
           
